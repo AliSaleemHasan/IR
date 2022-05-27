@@ -1,28 +1,17 @@
+from pkgutil import get_data
 from pydoc import doc
+from typing_extensions import Self
 import pandas as pd
 class DataSetOperations:
-    data = []
-    documents= {}
+    documents = {}
+    queries = {}
     relations = {}
-    queries ={}
-   
 
-
-    def get_data(self,filepath,type = 'text'):
-        if type == "csv":
-            self.data = pd.read_csv(filepath,sep=' ',header=None,on_bad_lines='skip')
-        else :
-            data = open(filepath)
-            self.data= data
-            data.close()
-        
-        return self
-    
-    def preprocess_docs(self,type='doc'):
-
+    def preprocess_docs(self,filepath,type = 'docs'):
+        data = open(filepath)        
         # remove \n from lines 
         lines = ""
-        for line in self.data:
+        for line in data:
             if line.startswith('.'):
                 lines = lines + '\n' + line.strip()
             else :
@@ -39,23 +28,24 @@ class DataSetOperations:
             elif line.startswith('.') and line.startswith('.X') == False:
                 stripped_line = line.lstrip('.').split(' ')
                 docs[doc_id][stripped_line[0]] =' '.join(stripped_line[1:])
-        if type == 'doc':
-            self.documents=docs
+        if type == 'docs':
+            self.documents= docs
         else :
-            self.relations= docs
-        return self
+            self.queries = docs
 
-    def preprocess_rel(self):
-        first_two = self.data.iloc[:,:2]
+        data.close()
+
+
+    def preprocess_rel(self,filepath):
+        data = pd.read_csv(filepath,sep=' ',header=None,on_bad_lines='skip')
+        first_two = data.iloc[:,:2]
         first_two.columns=['que_id','doc_id']
-        self.queries = first_two
-        return self
+        self.relations= first_two
     
 
-    def get_preprocessed_data(self):
-        return (self.documents,self.queries,self.relations)
-    
-    
+
+ 
+
 
 
 
