@@ -3,9 +3,20 @@ from pydoc import doc
 from typing_extensions import Self
 import pandas as pd
 class DataSetOperations:
-    documents = {}
-    queries = {}
-    relations = {}
+
+    def __init__(self,files):
+        self.documents={}
+        self.queries = {}
+        self.relations= {}
+        for path,type in files.items():
+            if type  == 'rel':
+              self.preprocess_rel(path)
+            else :
+                self.preprocess_docs(path,type)
+            
+
+            
+
 
     def preprocess_docs(self,filepath,type = 'docs'):
         data = open(filepath)        
@@ -17,17 +28,21 @@ class DataSetOperations:
             else :
                 lines = lines + ' ' + line.strip()
         
+        
+    
         # removing indecators (.I,.A,.B,.T)
         docs = {}
         doc_id = 0
         for line in lines.split('\n'):
             if line.startswith('.I'):
-                doc_id = line.split(' ')[1]
-                docs[doc_id] = {}
-                
-            elif line.startswith('.') and line.startswith('.X') == False:
+                line_words = line.split(' ')
+                doc_id = line_words[1]
+                docs[doc_id] = ' '.join(line_words[1:])
+            elif (line.startswith('.') and line.startswith('.X') == False ) :
                 stripped_line = line.lstrip('.').split(' ')
-                docs[doc_id][stripped_line[0]] =' '.join(stripped_line[1:])
+                docs[doc_id] +=" " + ' '.join(stripped_line[1:])
+
+
         if type == 'docs':
             self.documents= docs
         else :
