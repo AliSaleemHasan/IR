@@ -23,7 +23,7 @@ class DataProccessing:
         self.tagger= pos_tag
         self.w_corrector= Word
         self.data=data
-        if to:
+        if to != None:
           self.save_to_file(filepath=to)
 
         
@@ -95,6 +95,15 @@ class DataProccessing:
         f = open(filepath, "w")
         f.write(docs)
         f.close
+
+    def process_query(self):
+            data = self.tokanize_words(self.data)
+            data = self.stemm_words(data)
+            data = self.lemmatize_words(data)
+            data = self.gather_stirng(data)
+            data = self.parse_dates(data)
+            return data
+
 
 
             
