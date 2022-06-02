@@ -4,7 +4,7 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer,PorterStemmer
 from nltk.tokenize import word_tokenize
 from os.path import exists
-from textblob import Word
+from textblob import TextBlob
 import string
 
 
@@ -21,16 +21,18 @@ class DataProccessing:
         self.stop_words = stopwords.words('english')
         self.tokenizer = word_tokenize
         self.tagger= pos_tag
-        self.w_corrector= Word
-        self.data=data
+        self.data =data
+        
         if to != None:
           self.save_to_file(filepath=to)
 
         
 
-    def tokanize_words(self,data):
+    def tokanize_words(self,data):       
         data = self.tokenizer(data.lower())
         return data
+    
+
     
 
 
@@ -52,6 +54,7 @@ class DataProccessing:
         return data
     
 
+
  
     def parse_dates(self,data):
         natches = datefinder.find_dates(data, source=True)
@@ -61,10 +64,6 @@ class DataProccessing:
         return data
 
 
-    def correct_words(self,data):
-        data = [self.w_corrector(w) for w in data]
-        return data 
-    
     
 
     def gather_stirng(self,data):

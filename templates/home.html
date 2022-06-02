@@ -1,0 +1,17 @@
+{%if fetched%}
+<form method="post" action="{% url 'search' %}">
+  {%csrf_token%}
+  <input type="text" name="query" placeholder="please enter your query" />
+  <input type="submit" value="Search" />
+</form>
+
+<ul>
+  {% for item in docs%}
+  <li>{{item}}</li>
+  {% endfor %}
+</ul>
+
+{%else%}
+
+<h3>Please wait to fetch the data</h3>
+{%endif%}
