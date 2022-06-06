@@ -1,5 +1,3 @@
-from pkgutil import get_data
-from pydoc import doc
 class DataSetOperations:
 
     def __init__(self,files):

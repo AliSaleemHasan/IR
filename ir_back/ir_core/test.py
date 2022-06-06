@@ -26,7 +26,6 @@ index =0
 for key in cosines.keys():
     if index>10:
         break
-    print(key)
     index +=1
 
 

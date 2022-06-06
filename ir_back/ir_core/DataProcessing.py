@@ -17,7 +17,6 @@ class DataProccessing:
     def __init__(self,data,to=None):
         self.stemmer = PorterStemmer()
         self.lemmatizer = WordNetLemmatizer() 
-        #self.stop_words = stopwords.words('english')
         self.stop_words =open("ir_back/ir_core/data_sets/cacm/common_words",'r').read()
         self.tokenizer = word_tokenize
         self.tagger= pos_tag
@@ -37,7 +36,7 @@ class DataProccessing:
 
 
     def stemm_words(self,data):
-        data = [self.stemmer.stem(w) for w in data if w not in self.stop_words and w not in string.punctuation]
+        data = [self.stemmer.stem(w) for w in data if w not in self.stop_words ]
         return data 
     
     

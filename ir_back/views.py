@@ -71,9 +71,12 @@ def get_documents(request):
         response_data = []
         index =0
         for key in cosines.keys():
-            if index>19:
+            if index>10:
                 break
-            response_data.append(key)
+            response_data.append({
+                "doc_num":key,
+                "doc":docs[key]
+            })
             index +=1
             
         
@@ -127,7 +130,6 @@ def test1(request):
     test=[]
     for i,j in precision.items():
         test.append(j)
-    print(test)
     return render(request,'test1.html',{'fetched':True,'data': test,'querys': querys})
 
     

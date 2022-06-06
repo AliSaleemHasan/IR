@@ -57,7 +57,6 @@ class IROperations:
         for i in retrival[:10]:
             c=c+1
             if str(i) in relavant:
-                print(i)
                 r=r+1
         p_10 = r / 10
         precision = right/len(retrival)

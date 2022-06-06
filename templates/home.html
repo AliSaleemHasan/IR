@@ -1,17 +1,36 @@
-{%if fetched%}
-<form method="post" action="{% url 'search' %}">
-  {%csrf_token%}
-  <input type="text" name="query" placeholder="please enter your query" />
-  <input type="submit" value="Search" />
-</form>
+<head>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}" />
+</head>
+<body>
+  <div class="search">
+    {%if fetched%}
+    <form method="post" action="{% url 'search' %}">
+      {%csrf_token%}
+      <input
+        id="query"
+        type="text"
+        name="query"
+        placeholder="please enter your query"
+      />
+      <input id="submit" type="submit" value="Search" />
+    </form>
+  </div>
 
-<ul>
-  {% for item in docs%}
-  <li>{{item}}</li>
-  {% endfor %}
-</ul>
+  <h2>Top 10</h2>
+  <ul>
+    {% for item in docs%}
+    <li>
+      <h4>{{item.doc_num}}</h4>
+      <p>
+        <span class="preprocessed">Preprocessed document</span> : {{item.doc}}
+      </p>
+    </li>
+    {% endfor %}
+  </ul>
 
-{%else%}
+  {%else%}
 
-<h3>Please wait to fetch the data</h3>
-{%endif%}
+  <h3>Please wait to fetch the data</h3>
+  {%endif%}
+</body>
