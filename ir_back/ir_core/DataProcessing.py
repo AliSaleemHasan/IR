@@ -1,6 +1,5 @@
 from nltk.stem import WordNetLemmatizer
 from nltk import pos_tag
-from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer,PorterStemmer
 from nltk.tokenize import word_tokenize
 from os.path import exists
@@ -18,7 +17,8 @@ class DataProccessing:
     def __init__(self,data,to=None):
         self.stemmer = PorterStemmer()
         self.lemmatizer = WordNetLemmatizer() 
-        self.stop_words = stopwords.words('english')
+        #self.stop_words = stopwords.words('english')
+        self.stop_words =open("ir_back/ir_core/data_sets/cacm/common_words",'r').read()
         self.tokenizer = word_tokenize
         self.tagger= pos_tag
         self.data =data
@@ -72,6 +72,13 @@ class DataProccessing:
     
 
     
+    def correct_sentence(self,data):
+        sentence = TextBlob(data)
+        result = sentence.correct()
+        return result
+
+
+
     def save_to_file(self,filepath):
         file_exists = exists(filepath)
         docs = ""
@@ -81,9 +88,9 @@ class DataProccessing:
         for key,value in self.data.items():
             data = self.tokanize_words(value)
 
-            data = self.stemm_words(data)
-
             data = self.lemmatize_words(data)
+            
+            data = self.stemm_words(data)
 
             data = self.gather_stirng(data)
 
@@ -96,9 +103,10 @@ class DataProccessing:
         f.close
 
     def process_query(self):
-            data = self.tokanize_words(self.data)
-            data = self.stemm_words(data)
+            data = self.correct_sentence(self.data)
+            data = self.tokanize_words(str(data))
             data = self.lemmatize_words(data)
+            data = self.stemm_words(data)            
             data = self.gather_stirng(data)
             data = self.parse_dates(data)
             return data
@@ -119,6 +127,5 @@ class DataProccessing:
 
     
     
-
 
 

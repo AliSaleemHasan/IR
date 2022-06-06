@@ -1,7 +1,5 @@
 from pkgutil import get_data
 from pydoc import doc
-from typing_extensions import Self
-import pandas as pd
 class DataSetOperations:
 
     def __init__(self,files):
@@ -51,15 +49,24 @@ class DataSetOperations:
         data.close()
 
 
-    def preprocess_rel(self,filepath):
-        data = pd.read_csv(filepath,sep=' ',header=None,on_bad_lines='skip')
-        first_two = data.iloc[:,:2]
-        first_two.columns=['que_id','doc_id']
+    def preprocess_rel(self,filepath):            
+        f = open(filepath,"r")
+        c =  f.readlines();x=[];first_two={};count=1
+        for i in c:
+            i = i.split()
+            if(int(i[0]) == count):
+                x.append(i[1])
+            else:
+                first_two[count] = x
+                x=[]
+                count=int(i[0])
+                x.append(i[1])
+
+        first_two[int(i[0])] = x
         self.relations= first_two
-    
 
 
- 
+
 
 
 
