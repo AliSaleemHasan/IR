@@ -6,6 +6,11 @@ body {
 
 .search {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.search_box {
+  display: flex;
 }
 
 h4 {
@@ -33,7 +38,6 @@ form {
   margin: 5px;
   width: 30%;
   height: 40px;
-  background-color: hsla(228, 100%, 50%, 0.62);
   outline: none;
   border: none;
   border-radius: 30px;

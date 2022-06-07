@@ -5,19 +5,28 @@
 <body>
   <div class="search">
     {%if fetched%}
-    <form method="post" action="{% url 'search' %}">
-      {%csrf_token%}
-      <input
-        id="query"
-        type="text"
-        name="query"
-        placeholder="please enter your query"
-      />
-      <input id="submit" type="submit" value="Search" />
-    </form>
+    <div class="search_box">
+      <form method="post" action="{% url 'search' %}">
+        {%csrf_token%}
+        <input
+          id="query"
+          type="text"
+          name="query"
+          placeholder="please enter your query"
+        />
+        <input id="submit" type="submit" value="Search" />
+      </form>
+    </div>
+    <div class="results">
+      {%if docs%}
+      <a href="{% url 'results'%}">See Results</a>
+      {%endif%}
+    </div>
   </div>
 
+  {%if docs%}
   <h2>Top 10</h2>
+  {%endif%}
   <ul>
     {% for item in docs%}
     <li>

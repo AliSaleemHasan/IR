@@ -90,37 +90,55 @@ def get_results(request):
     rel = request.session.get('cacm_rel')
     docs = request.session.get('cacm_docs')
     querys = request.session['cacm_query_test']
+
+    precision= request.session.get('precision')
+    all_retrival= request.session.get('all_retrival')
+    all_relavant= request.session.get('all_relavant')
+    MAP= request.session.get('MAP')
+    MRR= request.session.get('MRR')
     
-    IRO = IROperations.IROperations(data=docs)
-    tfidf=IRO.transform_to_tfidf()
-    
-    all_list={};all_retrival={};all_relavant={};
-    for q_number,query in querys.items():
-        cosines = IRO.get_semelarity(tfidf,query)
-        response_data = [];index =0
-        for key in cosines.keys():
-            if index>9:
-                break
-            response_data.append(key)
-            index +=1
+
+    if(precision== None and all_relavant ==None and all_retrival==None and MAP==None and MRR == None):
+        IRO = IROperations.IROperations(data=docs)
+        tfidf=IRO.transform_to_tfidf()
         
-        retrival = response_data
-        all_retrival[q_number] =retrival
-        if(q_number in rel.keys()):
-            relavant = rel[q_number]
-        else:
-            all_list[q_number] = [0]
-            continue
-        all_relavant[q_number] = relavant 
-        p,p10,recall,MAP,mrr =  IRO.precision(relavant,retrival)
-        listed=[p,p10,recall,MAP,mrr]
-        all_list[q_number] = listed
-        listed=[]
-        
-    request.session['precision'] = all_list
-    request.session['all_retrival'] = all_retrival
-    request.session['all_relavant'] = all_relavant
-    return render(request,'test.html',{'fetched':True,'docs': "test",'p':p,'p_10':p10,'recall':recall,'MAP':MAP,'mrr':mrr})
+        all_list={};all_retrival={};all_relavant={};all_ap=[];all_rr=[]
+        for q_number,query in querys.items():
+            cosines = IRO.get_semelarity(tfidf,query)
+            response_data = [];index =0
+            for key in cosines.keys():
+                if index>9:
+                    break
+                response_data.append(key)
+                index +=1
+            
+            retrival = response_data
+            all_retrival[q_number] =retrival
+            if(q_number in rel.keys()):
+                relavant = rel[q_number]
+            else:
+                all_list[q_number] = [0]
+                continue
+            all_relavant[q_number] = relavant 
+            p,p10,recall,AP,rr =  IRO.precision(relavant,retrival)
+            all_ap.append(AP)
+            all_rr.append(rr)
+            listed=[p,p10,recall,AP,rr]
+            all_list[q_number] = listed
+            listed=[]
+        precision = all_list
+        MAP = sum(all_ap)/len(all_ap)
+        MRR = sum(all_rr)/len(all_rr)
+        request.session['precision'] = precision
+        request.session['all_retrival'] = all_retrival
+        request.session['all_relavant'] = all_relavant
+        request.session['MAP'] = MAP
+        request.session['MRR'] = MRR
+    data=[]
+    for i,j in precision.items():
+        data.append((i,j))
+    return render(request,'results.html',{'fetched':True,'data': data,'querys': querys,'MAP':MAP,'MRR':MRR})
+
 
 def test1(request):
     precision = request.session['precision']

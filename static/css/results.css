@@ -1,0 +1,16 @@
+body {
+  background-color: hsla(198, 25%, 92%, 0.549);
+  width: 100vw;
+  height: 100vh;
+}
+
+span {
+  font-family: sans-serif;
+  font-size: large;
+  font-weight: bold;
+  color: rgb(3, 49, 136);
+}
+
+ul {
+  list-style-type: none;
+}
